@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { Product } from "@/types";
-import { data } from "autoprefixer";
 
 interface PreviewModalStore {
   isOpen: boolean;

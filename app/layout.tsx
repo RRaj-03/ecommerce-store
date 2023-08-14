@@ -1,11 +1,7 @@
-import Footer from "@/components/footer";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Urbanist } from "next/font/google";
-import Navbar from "@/components/navbar";
-import ModalProvider from "@/providers/modalProvider";
-import ToastProvider from "@/providers/toastProvider";
-
 const font = Urbanist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -22,14 +18,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={font.className}>
-        <ToastProvider />
-        <ModalProvider />
-        <Navbar />
-        {children}
-        <Footer />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={font.className}>{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }

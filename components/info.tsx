@@ -26,6 +26,14 @@ const Info = ({ data }: { data: Product }) => {
             style={{ backgroundColor: data?.color?.value }}
           ></div>
         </div>
+        {data.filterItems.map((filter) => (
+          <div className="flex items-center gap-x-4">
+            <h3 className="font-semibold text-black">
+              {filter.filterItem.filter.name}:
+            </h3>
+            <div>{filter?.filterItem?.value}</div>
+          </div>
+        ))}
         <div className="mt-10 flex items-center gap-x-3">
           <Button className="flex items-center gap-x-2">
             Add To Cart

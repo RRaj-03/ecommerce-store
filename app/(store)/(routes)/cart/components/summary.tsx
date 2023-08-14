@@ -2,12 +2,21 @@
 import Button from "@/components/ui/button";
 import Currency from "@/components/ui/currency";
 import useCart from "@/hooks/useCart";
+import {
+  SignIn,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  useAuth,
+  useUser,
+} from "@clerk/nextjs";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
-import { toast } from "react-hot-toast/headless";
+import { toast } from "react-hot-toast";
 
 const Summary = () => {
+  const { user } = useUser();
   const searchParams = useSearchParams();
   const items = useCart((state) => state.items);
   const removeAll = useCart((state) => state.removeAll);
@@ -17,7 +26,17 @@ const Summary = () => {
   const onCheckout = async () => {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-      { productIds: items.map((item) => item.id) }
+      {
+        productIds: items.map((item) => item.id),
+        user: {
+          userId: user?.id,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+          fullName: user?.fullName,
+          phoneNumber: user?.primaryPhoneNumber?.phoneNumber,
+          emailAddress: user?.primaryEmailAddress?.emailAddress,
+        },
+      }
     );
     window.location = response.data.url;
   };
@@ -40,9 +59,20 @@ const Summary = () => {
           <Currency value={totalPrice} />
         </div>
       </div>
-      <Button className="mt-6 w-full" onClick={onCheckout}>
-        Checkout
-      </Button>
+      <SignedIn>
+        <Button
+          disabled={items.length === 0}
+          className="mt-6 w-full"
+          onClick={onCheckout}
+        >
+          Checkout
+        </Button>
+      </SignedIn>
+      <SignedOut>
+        <SignInButton mode="modal">
+          <Button className="mt-6 w-full">Sign In</Button>
+        </SignInButton>
+      </SignedOut>
     </div>
   );
 };

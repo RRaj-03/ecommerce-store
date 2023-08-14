@@ -10,6 +10,15 @@ export interface Category {
   billboard: Billboard;
 }
 
+export interface Store {
+  id: string;
+  name: string;
+  emailAddress?: string;
+  phoneNumber?: string;
+  Address?: string;
+  images: Image[];
+}
+
 export interface Product {
   id: string;
   category: Category;
@@ -19,6 +28,15 @@ export interface Product {
   size: Size;
   color: Color;
   images: Image[];
+  filterItems: Filters[];
+}
+export interface Filters {
+  filterItem: {
+    value: string;
+    filter: {
+      name: string;
+    };
+  };
 }
 
 export interface Image {

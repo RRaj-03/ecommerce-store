@@ -22,7 +22,7 @@ const CartItem = ({ data }: { data: Product }) => {
           className="object-cover object-center"
         />
       </div>
-      <div className="relative ml-4 flex flex-1 flex-col justify-between sm:ml-6">
+      <div className="relative ml-4 flex flex-1 flex-col gap-y-4 sm:ml-6">
         <div className="absolute z-10 top-0 right-0">
           <IconButton onClick={onRemove} icon={<X size={15} />} />
         </div>
@@ -31,12 +31,28 @@ const CartItem = ({ data }: { data: Product }) => {
             <p className="font-semibold text-black text-lg">{data.name}</p>
           </div>
           <div className="mt-1 flex text-sm">
-            <p className="text-gray-500">{data.color.name}</p>
+            <p className="text-gray-500 gap-x-4 flex items-center justify-between">
+              <span>{data.color.name}</span>
+              <div
+                className="h-6 w-6 rounded-full border"
+                style={{ backgroundColor: data.color.value }}
+              />
+            </p>
             <p className="text-gray-500 ml-4 pl-4 border-l border-gray-200">
               {data.size.name}
             </p>
           </div>
           <Currency value={data.price} />
+        </div>
+        <div>
+          {data.filterItems.map((item) => (
+            <p className="flex items-center gap-x-4">
+              <span className="font-medium">
+                {item.filterItem.filter.name}:
+              </span>
+              <span className="text-gray-500 ">{item.filterItem.value}</span>
+            </p>
+          ))}
         </div>
       </div>
     </li>
