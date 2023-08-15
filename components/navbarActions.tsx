@@ -4,7 +4,14 @@ import Button from "./ui/button";
 import { ShoppingBag } from "lucide-react";
 import useCart from "@/hooks/useCart";
 import { useRouter } from "next/navigation";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import {
+  SignInButton,
+  SignOutButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+import UserProfileButton from "./userProfileButton";
 const NavbarActions = () => {
   const cart = useCart();
   const router = useRouter();
@@ -20,10 +27,10 @@ const NavbarActions = () => {
   return (
     <div className="ml-auto flex items-center gap-x-4">
       <SignedOut>
-        <SignInButton mode="modal" />
+        <SignInButton />
       </SignedOut>
       <SignedIn>
-        <UserButton afterSignOutUrl="/" />
+        <UserProfileButton />
       </SignedIn>
       <Button
         onClick={() => {

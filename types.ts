@@ -54,3 +54,18 @@ export interface Color {
   name: string;
   value: string;
 }
+
+export interface Order {
+  id: string;
+  address: string;
+  phone: string;
+
+  userId: string;
+  transactionId: string;
+
+  orderItems: {
+    product: Product;
+  }[];
+  isPaid: boolean;
+  createdAt: Date;
+}
