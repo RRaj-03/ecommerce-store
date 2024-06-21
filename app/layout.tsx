@@ -1,27 +1,24 @@
-import { ClerkProvider } from "@clerk/nextjs";
+"use client";
 import "./globals.css";
-import type { Metadata } from "next";
 import { Urbanist } from "next/font/google";
+import { SessionProvider } from "next-auth/react";
+import ToastProvider from "@/providers/toastProvider";
 const font = Urbanist({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Store",
-  description: "Store ",
-  icons: {
-    icon: "/favicon.ico",
-  },
-};
-
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={font.className}>{children}</body>
-      </html>
-    </ClerkProvider>
-  );
+	return (
+		<SessionProvider>
+			<html lang="en">
+				<body className={font.className}>
+					<ToastProvider />
+
+					{children}
+				</body>
+			</html>
+		</SessionProvider>
+	);
 }

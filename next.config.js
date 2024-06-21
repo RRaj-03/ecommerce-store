@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    domains: ["res.cloudinary.com"],
-  },
+	images: {
+		domains: ["res.cloudinary.com", "lh3.googleusercontent.com"],
+	},
 
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+	eslint: {
+		ignoreDuringBuilds: true,
+	},
 };
 
 module.exports = nextConfig;

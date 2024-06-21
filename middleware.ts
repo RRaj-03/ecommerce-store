@@ -1,18 +1,22 @@
-import { authMiddleware } from "@clerk/nextjs";
-
 // This example protects all routes including api/trpc routes
 // Please edit this to allow other routes to be public as needed.
 // See https://clerk.com/docs/nextjs/middleware for more information about configuring your middleware
-export default authMiddleware({
-  publicRoutes: [
-    "/",
-    "/category/:path*",
-    "/product/:path*",
-    "/cart/:path*",
-    "/api/:path*",
-  ],
-});
 
+import { NextRequest } from "next/server";
+export default async function middleware(request: NextRequest) {
+	// const { nextUrl } = request;
+	// const session = await getServerSession();
+	// console.log("session", session);
+	// const isAuthenticated = !!session?.user;
+	// console.log(isAuthenticated, nextUrl.pathname);
+	// const isPublicRoute =
+	// 	(PUBLIC_ROUTES.find((route) => nextUrl.pathname.startsWith(route)) ||
+	// 		nextUrl.pathname === ROOT) &&
+	// 	!PROTECTED_SUB_ROUTES.find((route) => nextUrl.pathname.includes(route));
+	// if (!isAuthenticated && !isPublicRoute)
+	// 	return NextResponse.redirect(new URL(SIGNIN, nextUrl));
+	// return NextResponse.next();
+}
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+	matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
