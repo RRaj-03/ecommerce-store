@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Button from "./ui/button";
 import { ShoppingBag } from "lucide-react";
 import useCart from "@/hooks/useCart";
-import { useRouter, redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import UserButton from "./userProfileButton";
 import { useSession } from "next-auth/react";
@@ -13,12 +13,15 @@ const NavbarActions = ({ user }: { user: any }) => {
 	const { status } = useSession();
 
 	const [isMounted, setIsMounted] = useState(false);
+	const init = useCart((state) => state.initCart);
 	useEffect(() => {
+		init();
 		setIsMounted(true);
 	}, []);
 	if (!isMounted) {
 		return null;
 	}
+
 	return (
 		<div className="ml-auto flex items-center gap-x-4">
 			{status === "authenticated" ? (
@@ -26,7 +29,7 @@ const NavbarActions = ({ user }: { user: any }) => {
 			) : (
 				<Button
 					onClick={() => {
-						redirect("/auth");
+						router.push("/auth");
 					}}
 				>
 					Sign In
@@ -40,7 +43,7 @@ const NavbarActions = ({ user }: { user: any }) => {
 			>
 				<ShoppingBag size={20} color="white" />
 				<span className="ml-2 text-sm font-medium text-white">
-					{cart.items.length}
+					{cart?.items?.length}
 				</span>
 			</Button>
 		</div>

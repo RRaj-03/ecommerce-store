@@ -21,6 +21,7 @@ const MainNav = ({ data }: { data: Category[] }) => {
 				label: route.name,
 				active: pathname === `/category/${route.id}`,
 			})),
+			href: `/category`,
 		},
 		{
 			href: `/about`,
@@ -36,7 +37,16 @@ const MainNav = ({ data }: { data: Category[] }) => {
 						if (route?.categories) {
 							return (
 								<NavigationMenuItem className="w-full">
-									<NavigationMenuTrigger>{route.label}</NavigationMenuTrigger>
+									<NavigationMenuTrigger
+										className={cn(
+											" hover:text-black transition-colors font-medium text-sm",
+											pathname.startsWith(route.href)
+												? "text-black"
+												: "text-neutral-500"
+										)}
+									>
+										{route.label}
+									</NavigationMenuTrigger>
 									<NavigationMenuContent className="w-full">
 										<ul className="grid  gap-3 p-4 w-[150px]">
 											{route.categories.map((component) => (

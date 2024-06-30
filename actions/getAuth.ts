@@ -4,7 +4,6 @@ import { getServerSession } from "next-auth";
 
 export const auth = async () => {
 	const session = await getServerSession(authConfig);
-	console.log("sessio", session);
 	try {
 		if (!session) {
 			return { userId: undefined, email: undefined };
@@ -16,7 +15,6 @@ export const auth = async () => {
 		return {
 			...res.data.user,
 			userId: res.data.user.id,
-			token: session?.accessToken,
 		};
 	} catch (error) {
 		return { userId: undefined, email: undefined };

@@ -3,7 +3,7 @@ import { AppearanceForm } from "./components/AppearenceForm";
 import { auth } from "@/actions/getAuth";
 
 export default async function SettingsPage() {
-	const { userId } = await auth();
+	const { userId, theme } = await auth();
 	return (
 		<div className="space-y-6">
 			<div>
@@ -14,7 +14,7 @@ export default async function SettingsPage() {
 				</p>
 			</div>
 			<Separator />
-			<AppearanceForm userId={userId!} />
+			<AppearanceForm userId={userId!} theme={theme} />
 		</div>
 	);
 }

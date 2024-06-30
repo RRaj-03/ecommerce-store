@@ -11,16 +11,20 @@ export async function PUT(req: NextRequest) {
 
 		const updatedUser = await axios.put("http://localhost:3000/api/user", body);
 		return NextResponse.json(
-			{ message: "User Updated", updatedUser: updatedUser.data.updatedUser },
+			{
+				message: "User Updated",
+				updatedUser: updatedUser.data.updatedUser,
+				...updatedUser.data,
+			},
 			{ status: 200 }
 		);
 	} catch (error: any) {
-		console.log("error [user Put]:", error);
 		if (error?.response?.status) {
 			return NextResponse.json(
 				{
 					message: error.response.data?.message || "Internal Server Error",
 					error: error.response.data?.error || error,
+					...error.response.data,
 				},
 				{ status: error?.response?.status || 500 }
 			);

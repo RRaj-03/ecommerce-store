@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
 				{
 					message: error.response.data?.message || "Internal Server Error",
 					error: error.response.data?.error || error,
+					...error.response.data,
 				},
 				{ status: error?.response?.status || 500 }
 			);

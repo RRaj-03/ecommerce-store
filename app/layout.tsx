@@ -1,24 +1,28 @@
-"use client";
 import "./globals.css";
 import { Urbanist } from "next/font/google";
-import { SessionProvider } from "next-auth/react";
 import ToastProvider from "@/providers/toastProvider";
+import SessionProvider from "@/providers/sessionProvider";
+import { auth } from "@/actions/getAuth";
+import { ThemeProvider } from "@/providers/themeProvider";
 const font = Urbanist({ subsets: ["latin"] });
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const { theme = "system" } = await auth();
 	return (
-		<SessionProvider>
-			<html lang="en">
-				<body className={font.className}>
-					<ToastProvider />
+		<html lang="en">
+			<body className={font.className}>
+				<SessionProvider>
+					<ThemeProvider attribute="class" defaultTheme={theme} enableSystem>
+						<ToastProvider />
 
-					{children}
-				</body>
-			</html>
-		</SessionProvider>
+						{children}
+					</ThemeProvider>
+				</SessionProvider>
+			</body>
+		</html>
 	);
 }

@@ -11,7 +11,6 @@ export const revalidate = 0;
 const Navbar = async () => {
 	const categories = await getCategories();
 	const user = await auth();
-	// console.log("user", user);
 	return (
 		<div className="border-b">
 			<Contanier>

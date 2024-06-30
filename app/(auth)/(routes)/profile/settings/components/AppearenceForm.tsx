@@ -17,25 +17,28 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ca } from "date-fns/locale";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { use } from "react";
-
+import { useTheme } from "next-themes";
 const appearanceFormSchema = z.object({
-	theme: z.enum(["light", "dark"], {
+	theme: z.enum(["light", "dark", "system"], {
 		required_error: "Please select a theme.",
 	}),
 });
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<AppearanceFormValues> = {
-	theme: "light",
-};
-
-export function AppearanceForm({ userId }: { userId: string }) {
+export function AppearanceForm({
+	userId,
+	theme,
+}: {
+	userId: string;
+	theme: "light" | "dark" | "system";
+}) {
+	const { setTheme, systemTheme } = useTheme();
 	const form = useForm<AppearanceFormValues>({
 		resolver: zodResolver(appearanceFormSchema),
-		defaultValues,
+		defaultValues: {
+			theme: theme,
+		},
 	});
 
 	function onSubmit(data: AppearanceFormValues) {
@@ -46,8 +49,11 @@ export function AppearanceForm({ userId }: { userId: string }) {
 			});
 			toast.success("Appearance updated successfully");
 		} catch (error: any) {
-			console.log("error [user appearance Post]:", error);
-			toast.error(error?.response?.data?.message);
+			if (error?.response?.data?.message) {
+				toast.error(error?.response?.data?.message);
+			} else {
+				toast.error("Something went wrong");
+			}
 		}
 	}
 
@@ -68,9 +74,12 @@ export function AppearanceForm({ userId }: { userId: string }) {
 							</FormDescription>
 							<FormMessage />
 							<RadioGroup
-								onValueChange={field.onChange}
+								onValueChange={(value) => {
+									setTheme(value);
+									field.onChange(value);
+								}}
 								defaultValue={field.value}
-								className="grid max-w-md grid-cols-2 gap-8 pt-2"
+								className="grid max-w-2xl grid-cols-3 gap-8 pt-2"
 							>
 								<FormItem>
 									<FormLabel className="[&:has([data-state=checked])>div]:border-primary">
@@ -121,6 +130,51 @@ export function AppearanceForm({ userId }: { userId: string }) {
 										</div>
 										<span className="block w-full p-2 text-center font-normal">
 											Dark
+										</span>
+									</FormLabel>
+								</FormItem>
+								<FormItem>
+									<FormLabel className="[&:has([data-state=checked])>div]:border-primary">
+										<FormControl>
+											<RadioGroupItem value="system" className="sr-only" />
+										</FormControl>
+										{systemTheme === "dark" ? (
+											<div className="items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground">
+												<div className="space-y-2 rounded-sm bg-slate-950 p-2">
+													<div className="space-y-2 rounded-md bg-slate-800 p-2 shadow-sm">
+														<div className="h-2 w-[80px] rounded-lg bg-slate-400" />
+														<div className="h-2 w-[100px] rounded-lg bg-slate-400" />
+													</div>
+													<div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm">
+														<div className="h-4 w-4 rounded-full bg-slate-400" />
+														<div className="h-2 w-[100px] rounded-lg bg-slate-400" />
+													</div>
+													<div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm">
+														<div className="h-4 w-4 rounded-full bg-slate-400" />
+														<div className="h-2 w-[100px] rounded-lg bg-slate-400" />
+													</div>
+												</div>
+											</div>
+										) : (
+											<div className="items-center rounded-md border-2 border-muted p-1 hover:border-accent">
+												<div className="space-y-2 rounded-sm bg-[#ecedef] p-2">
+													<div className="space-y-2 rounded-md bg-white p-2 shadow-sm">
+														<div className="h-2 w-[80px] rounded-lg bg-[#ecedef]" />
+														<div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
+													</div>
+													<div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
+														<div className="h-4 w-4 rounded-full bg-[#ecedef]" />
+														<div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
+													</div>
+													<div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
+														<div className="h-4 w-4 rounded-full bg-[#ecedef]" />
+														<div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
+													</div>
+												</div>
+											</div>
+										)}
+										<span className="block w-full p-2 text-center font-normal">
+											System
 										</span>
 									</FormLabel>
 								</FormItem>

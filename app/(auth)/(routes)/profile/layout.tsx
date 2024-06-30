@@ -6,6 +6,7 @@ import { SidebarNav } from "./components/sidebar-nav";
 import Navbar from "@/components/navbar";
 import { auth } from "@/actions/getAuth";
 import { redirect } from "next/navigation";
+import getCategories from "@/actions/getCategories";
 
 export const metadata: Metadata = {
 	title: "Forms",
@@ -26,6 +27,10 @@ const sidebarNavItems = [
 		href: "/profile/saved-address",
 	},
 	{
+		title: "Orders",
+		href: "/profile/orders",
+	},
+	{
 		title: "Setting",
 		href: "/profile/settings",
 	},
@@ -43,6 +48,7 @@ export default async function SettingsLayout({
 	if (!userId) {
 		redirect("/auth");
 	}
+
 	return (
 		<>
 			<Navbar />

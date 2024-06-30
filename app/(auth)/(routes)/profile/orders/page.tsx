@@ -7,6 +7,7 @@ import { formatter } from "@/lib/utils";
 import { format } from "date-fns";
 import { auth } from "@/actions/getAuth";
 import { redirect } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
 
 const OrderPage = async () => {
 	const { userId } = await auth();
@@ -14,16 +15,14 @@ const OrderPage = async () => {
 	const orders = await getOrders(userId!);
 	const formattedOrders: OrderColumn[] = orders.map((item) => ({
 		id: item.id,
-		phone: item.phone,
-		address: item.address,
-		products: item.orderItems
-			.map((orderItem) => orderItem.product.name)
-			.join(", "),
-		totalPrice: formatter.format(
-			item.orderItems.reduce((total, item) => {
-				return total + Number(item.product.price);
-			}, 0)
-		),
+		phone: item.address.phoneNumber,
+		address: `${item.address.name}\n${item.address.line1}, ${item.address?.line2}, ${item.address.street}, ${item.address.city}, ${item.address.state}, ${item.address.country}, ${item.address.postalCode}`,
+		products: item.Products.map((orderItem) => orderItem.name).join(", "),
+		totalPrice: formatter.format(item.total),
+		paidAmount: formatter.format(item.paidAmount),
+		subtotal: formatter.format(item.subtotal),
+		discount: formatter.format(item.discount),
+		coupounCode: item?.coupouns?.code,
 		transactionId: item.transactionId,
 		isPaid: item.isPaid,
 		createdAt: format(
@@ -32,14 +31,14 @@ const OrderPage = async () => {
 		),
 	}));
 	return (
-		<div className="px-6 pb-8">
-			<div className="gap-y-1 flex flex-col items-stretch justify-start mt-2">
-				<div className="font-semibold text-4xl">Orders</div>
-				<div className="font-normal text-base text-muted-foreground">
-					You can manage your orders here
-				</div>
+		<div className="space-y-6">
+			<div>
+				<h3 className="text-lg font-medium">Your Orders</h3>
+				<p className="text-sm text-muted-foreground">
+					You can view all your orders here
+				</p>
 			</div>
-			<hr className="my-10 border-none" />
+			<Separator />
 			<DataTable
 				columns={columns}
 				data={formattedOrders}

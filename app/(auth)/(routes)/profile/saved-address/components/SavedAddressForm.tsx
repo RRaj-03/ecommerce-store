@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button1";
 import {
 	Form,
@@ -21,41 +20,56 @@ import {
 	SavedAddressFormSchema,
 	SavedAddressFormValues,
 } from "@/Schema/userSchema";
-import { useSession } from "next-auth/react";
 
 // This can come from your database or API.
-const defaultValues: Partial<SavedAddressFormValues> = {
-	name: "",
-	phoneNumber: "",
-	line1: "",
-	line2: "",
-	street: "",
-	city: "",
-	state: "",
-	country: "",
-	postalCode: "",
-};
 
-export function SavedAddress({ userId }: { userId: string }) {
+export function SavedAddress({
+	userId,
+	defaultValues,
+	setOpen,
+	setDefaultValues,
+	setRefresh,
+}: {
+	userId: string;
+	defaultValues: Partial<SavedAddressFormValues>;
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	setDefaultValues: React.Dispatch<
+		React.SetStateAction<Partial<SavedAddressFormValues>>
+	>;
+	setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
 	const [loading, setLoading] = useState(false);
 	const form = useForm<SavedAddressFormValues>({
 		resolver: zodResolver(SavedAddressFormSchema),
 		defaultValues: defaultValues,
 	});
-	const session = useSession();
 	function onSubmit(data: SavedAddressFormValues) {
 		setLoading(true);
 		axios
-			.post("/api/user/change-text", {
+			.post("/api/user/address", {
 				...data,
-				userId: userId,
 			})
-			.then(() => {
-				toast.success("text Updated");
+			.then((res) => {
+				toast.success(res.data.message);
 				setLoading(false);
+				setOpen(false);
+				setDefaultValues({
+					name: "",
+					phoneNumber: "",
+					line1: "",
+					line2: "",
+					street: "",
+					city: "",
+					state: "",
+					country: "",
+					postalCode: "",
+				});
+				setRefresh(true);
 			})
 			.catch((error) => {
-				toast.error(error.response.data.message);
+				if (error?.response?.data?.message)
+					toast.error(error.response.data.message);
+				toast.error("Something went wrong");
 				setLoading(false);
 			});
 	}
@@ -203,8 +217,8 @@ export function SavedAddress({ userId }: { userId: string }) {
 					)}
 				/>
 
-				<Button type="submit" className="col-span-2 mt-4">
-					Add Address
+				<Button type="submit" className="col-span-2 mt-4" disabled={loading}>
+					{defaultValues?.name !== "" ? "Save Changes" : "Add Address"}
 				</Button>
 			</form>
 		</Form>

@@ -1,26 +1,32 @@
-import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
-export async function POST(req: NextRequest) {
-	try {
-		const body = await req.json();
+import { NextRequest, NextResponse } from "next/server";
 
-		body.token = req.cookies.get("next-auth.session-token")?.value;
-		const res = await axios.post(
-			"http://localhost:3000/api/user/change-password",
-			body
+export async function GET(
+	req: NextRequest,
+	{ params }: { params: { orderId: string } }
+) {
+	try {
+		const token = req.cookies.get("next-auth.session-token")?.value;
+		const res = await axios.get(
+			`${process.env.NEXT_PUBLIC_API_URL}/orders/${params.orderId}`,
+			{
+				headers: {
+					authorization: `Bearer ${token}`,
+				},
+			}
 		);
 		return NextResponse.json(
 			{ message: res.data.message, ...res.data },
 			{ status: res.status }
 		);
 	} catch (error: any) {
-		console.log("[error Change Password]", error);
+		// console.log("[error Address GET]", error);
 		if (error?.response?.status) {
 			return NextResponse.json(
 				{
 					message: error.response.data?.message || "Internal Server Error",
-					...error.response.data,
 					error: error.response.data?.error || error,
+					...error.response.data,
 				},
 				{ status: error?.response?.status || 500 }
 			);

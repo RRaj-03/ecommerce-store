@@ -52,7 +52,6 @@ export function AccountForm({
 
 			toast.success("Account updated successfully");
 		} catch (error: any) {
-			console.log("error", error);
 			toast.error(error?.response?.data?.message);
 		} finally {
 			setLoading(false);

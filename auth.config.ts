@@ -17,13 +17,26 @@ export const authConfig: NextAuthOptions = {
 	},
 	callbacks: {
 		async session({ session, token }) {
-			return { ...session, accessToken: token?.accessToken };
+			return { ...session, accessToken: token?.accessToken, User: token?.user };
 		},
 		async jwt({ token, account, user, profile, session, trigger }) {
 			if (account) {
 				token.accessToken = account.access_token;
 			}
-			return token;
+			try {
+				const res = await axios.post("http://localhost:3000/api/user", {
+					email: token.email,
+				});
+				if (!res.data.user) return { userId: undefined, email: undefined };
+				token.user = {
+					...res.data.user,
+					userId: res.data.user.id,
+				};
+
+				return token;
+			} catch (e) {
+				return token;
+			}
 		},
 		signIn: async ({ user, account, profile }) => {
 			try {
@@ -35,7 +48,6 @@ export const authConfig: NextAuthOptions = {
 						}
 					);
 					const user = res.data.user;
-					console.log("user", user);
 					if (user) {
 						return true;
 					}

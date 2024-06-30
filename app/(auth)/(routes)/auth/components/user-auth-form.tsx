@@ -66,7 +66,6 @@ export default function UserAuthForm({
 				setSignUp(true);
 			}
 		} catch (error: any) {
-			console.log("error", error);
 			toast.error(error.response.data.message);
 		} finally {
 			setIsLoading(false);
@@ -91,7 +90,6 @@ export default function UserAuthForm({
 				toast.error(res!.error);
 			}
 		} catch (error: any) {
-			console.log("error", error);
 			toast.error(error.response.data.message);
 		} finally {
 			setIsLoading(false);
@@ -146,7 +144,6 @@ export default function UserAuthForm({
 			const data = res.data;
 			redirect("/");
 		} catch (error: any) {
-			console.log("error", error);
 			toast.error(error.response.data.message);
 		} finally {
 			setIsLoading(false);
@@ -200,7 +197,6 @@ export default function UserAuthForm({
 							onClick={async () => {
 								setIsLoading(true);
 								const res = await SocialSignIn("github", { callbackUrl: "/" });
-								console.log("res", res);
 								setIsLoading(false);
 							}}
 						>
