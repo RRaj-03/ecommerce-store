@@ -91,13 +91,13 @@ const useCart = create(
 					})
 					.catch((error) => {
 						console.log("[error cart GET]", error);
-						if (error?.response?.status) {
-							toast.error(
-								error.response.data?.message || "Cart initialization failed."
-							);
-						} else {
-							toast.error("Cart initialization failed.");
-						}
+						// if (error?.response?.status) {
+						// 	toast.error(
+						// 		error.response.data?.message || "Cart initialization failed."
+						// 	);
+						// } else {
+						// 	toast.error("Cart initialization failed.");
+						// }
 					});
 			},
 			updateCart: (data: Product[]) => {
@@ -122,9 +122,13 @@ const useCart = create(
 					.catch((error) => {
 						console.log("[error cart POST]", error);
 						if (error?.response?.status) {
-							toast.error(
-								error.response.data?.message || "Cart update failed."
-							);
+							if (error?.response?.status === 401) {
+								toast.error("Please login to Save the cart");
+							} else {
+								toast.error(
+									error.response.data?.message || "Cart update failed."
+								);
+							}
 						} else {
 							toast.error("Cart update failed.");
 						}

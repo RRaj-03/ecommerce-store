@@ -1,10 +1,9 @@
 import type { Account, NextAuthOptions, Profile, User } from "next-auth";
-import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
-import { auth } from "@/actions/getAuth";
 import bcrypt from "bcryptjs";
+import { AdapterUser } from "next-auth/adapters";
 export const authConfig: NextAuthOptions = {
 	session: {
 		strategy: "jwt",
@@ -38,7 +37,21 @@ export const authConfig: NextAuthOptions = {
 				return token;
 			}
 		},
-		signIn: async ({ user, account, profile }) => {
+		signIn: async ({
+			user: User,
+			account,
+			profile,
+		}: {
+			user: User | AdapterUser;
+			account: Account | null;
+			profile?:
+				| (Profile & {
+						given_name?: string;
+						family_name?: string;
+						picture?: string;
+				  })
+				| undefined;
+		}) => {
 			try {
 				if (account && account.type === "oauth") {
 					const res = await axios.post(
@@ -49,6 +62,7 @@ export const authConfig: NextAuthOptions = {
 					);
 					const user = res.data.user;
 					if (user) {
+						User = user;
 						return true;
 					}
 					const res1 = await axios.post(
@@ -57,14 +71,14 @@ export const authConfig: NextAuthOptions = {
 							email: profile!.email!,
 							firstName: profile?.given_name
 								? profile?.given_name
-								: profile?.name,
+								: profile?.name || "",
 							lastName: profile?.family_name ? profile?.family_name : "",
 							password: bcrypt.hashSync(profile!.email!, 10),
 							isOwner: false,
 							image: profile?.picture!,
 						}
 					);
-					const newUser = res1.data.user;
+					User = res1.data.user;
 				}
 				return true;
 			} catch (e: any) {
@@ -78,13 +92,13 @@ export const authConfig: NextAuthOptions = {
 		GoogleProvider({
 			clientId: process.env.GOOGLE_CLIENT_ID!,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-			authorization: {
-				params: {
-					prompt: "consent",
-					access_type: "offline",
-					response_type: "code",
-				},
-			},
+			// authorization: {
+			// 	params: {
+			// 		prompt: "consent",
+			// 		access_type: "offline",
+			// 		response_type: "code",
+			// 	},
+			// },
 		}),
 		// GitHubProvider({
 		// 	clientId: process.env.GITHUB_CLIENT_ID!,

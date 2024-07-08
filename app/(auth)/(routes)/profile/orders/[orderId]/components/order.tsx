@@ -120,12 +120,6 @@ export default function OrderBill({ orderId }: { orderId: string }) {
 					</CardDescription>
 				</div>
 				<div className="ml-auto flex items-center gap-1">
-					<Button size="sm" variant="outline" className="h-8 gap-1">
-						<Truck className="h-3.5 w-3.5" />
-						<span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-							Track Order
-						</span>
-					</Button>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button size="icon" variant="outline" className="h-8 w-8">
@@ -137,7 +131,7 @@ export default function OrderBill({ orderId }: { orderId: string }) {
 							<DropdownMenuItem>Edit</DropdownMenuItem>
 							<DropdownMenuItem>Export</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem>Trash</DropdownMenuItem>
+							<DropdownMenuItem>Cancel</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -208,7 +202,7 @@ export default function OrderBill({ orderId }: { orderId: string }) {
 						<div className="flex items-center justify-between">
 							<dt className="text-muted-foreground">Customer</dt>
 							<dd>
-								{order.user.firstName} + {order.user.lastName}
+								{order.user.firstName} {order.user.lastName}
 							</dd>
 						</div>
 						<div className="flex items-center justify-between">
@@ -225,7 +219,7 @@ export default function OrderBill({ orderId }: { orderId: string }) {
 						</div>
 					</dl>
 				</div>
-				<Separator className="my-4" />
+				{/* <Separator className="my-4" />
 				<div className="grid gap-3">
 					<div className="font-semibold">Payment Information</div>
 					<dl className="grid gap-3">
@@ -237,7 +231,7 @@ export default function OrderBill({ orderId }: { orderId: string }) {
 							<dd>**** **** **** 4532</dd>
 						</div>
 					</dl>
-				</div>
+				</div> */}
 			</CardContent>
 			<CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
 				<div className="text-xs text-muted-foreground">

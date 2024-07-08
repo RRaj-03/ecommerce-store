@@ -1,8 +1,13 @@
 import Contanier from "@/components/ui/contanier";
-import React from "react";
 import Summary from "./components/summary";
+import { auth } from "@/actions/getAuth";
+import { redirect } from "next/navigation";
 
-const CheckoutPage = () => {
+const CheckoutPage = async () => {
+	const { userId } = await auth();
+	if (!userId) {
+		redirect("/auth");
+	}
 	return (
 		<div className="bg-white ">
 			<Contanier>
