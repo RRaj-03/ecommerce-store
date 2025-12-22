@@ -1,8 +1,8 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Urbanist } from "next/font/google";
-const font = Urbanist({ subsets: ["latin"] });
+// import { Urbanist } from "next/font/google";
+const font = { className: "font-sans" };
 
 export const metadata: Metadata = {
   title: "Store",
