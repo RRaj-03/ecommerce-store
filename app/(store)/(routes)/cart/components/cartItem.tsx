@@ -30,18 +30,6 @@ const CartItem = ({ data }: { data: Product }) => {
           <div className="flex justify-between">
             <p className="font-semibold text-black text-lg">{data.name}</p>
           </div>
-          <div className="mt-1 flex text-sm">
-            <p className="text-gray-500 gap-x-4 flex items-center justify-between">
-              <span>{data.color.name}</span>
-              <div
-                className="h-6 w-6 rounded-full border"
-                style={{ backgroundColor: data.color.value }}
-              />
-            </p>
-            <p className="text-gray-500 ml-4 pl-4 border-l border-gray-200">
-              {data.size.name}
-            </p>
-          </div>
           <Currency value={data.price} />
         </div>
         <div>

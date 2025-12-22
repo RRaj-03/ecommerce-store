@@ -3,12 +3,13 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { Montserrat } from "next/font/google";
+// import { Montserrat } from "next/font/google"; // Disabled to avoid build timeout
 import { cn } from "@/lib/utils";
 import { ArrowLeftIcon, ShoppingCart, UserCog } from "lucide-react";
 import getStores from "@/actions/getStore";
 
-const montserrat = Montserrat({ weight: "600", subsets: ["latin"] });
+// const montserrat = Montserrat({ weight: "600", subsets: ["latin"] });
+const montserrat = { className: "font-sans" };
 const routes = [
   {
     label: "Profile Dashboard",

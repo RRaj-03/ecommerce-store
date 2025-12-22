@@ -1,5 +1,5 @@
 "use client";
-import { Color, Size } from "@/types";
+import { FilterItem } from "@/types";
 import qs from "query-string";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
@@ -13,7 +13,7 @@ const Filter = ({
 }: {
   valueKey: string;
   name: string;
-  data: (Size | Color)[];
+  data: FilterItem[];
 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();

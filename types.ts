@@ -25,31 +25,23 @@ export interface Product {
   name: string;
   price: string;
   isFeatured: boolean;
-  size: Size;
-  color: Color;
   images: Image[];
-  filterItems: Filters[];
+  filterItems: ProductOnFilterItem[];
 }
-export interface Filters {
-  filterItem: {
-    value: string;
-    filter: {
-      name: string;
-    };
+
+export interface ProductOnFilterItem {
+  filterItem: FilterItem & {
+    filter: Filter;
   };
 }
 
-export interface Image {
-  id: string;
-  url: string;
-}
-
-export interface Size {
+export interface Filter {
   id: string;
   name: string;
-  value: string;
+  filterItems: FilterItem[];
 }
-export interface Color {
+
+export interface FilterItem {
   id: string;
   name: string;
   value: string;
@@ -68,4 +60,9 @@ export interface Order {
   }[];
   isPaid: boolean;
   createdAt: Date;
+}
+
+export interface Image {
+  id: string;
+  url: string;
 }

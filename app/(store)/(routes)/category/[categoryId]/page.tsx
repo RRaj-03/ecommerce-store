@@ -1,7 +1,6 @@
 import getCategory from "@/actions/getCategory";
-import getColors from "@/actions/getColors";
+import getFilters from "@/actions/getFilters";
 import getProducts from "@/actions/getProducts";
-import getSizes from "@/actions/getSizes";
 import Billboard from "@/components/billboard";
 import Contanier from "@/components/ui/contanier";
 import React from "react";
@@ -16,17 +15,14 @@ const CategoryPage = async ({
 }: {
   params: { categoryId: string };
   searchParams: {
-    colorId: string;
-    sizeId: string;
+    [key: string]: string | string[] | undefined;
   };
 }) => {
   const products = await getProducts({
     categoryId: params.categoryId,
-    colorId: searchParams.colorId,
-    sizeId: searchParams.sizeId,
+    ...searchParams,
   });
-  const sizes = await getSizes();
-  const colors = await getColors();
+  const filters = await getFilters();
   const category = await getCategory(params.categoryId);
   return (
     <div className="bg-white ">
@@ -34,10 +30,15 @@ const CategoryPage = async ({
         <Billboard data={category.billboard} />
         <div className="px-4 sm:px-6 lg:px-8 pb-24">
           <div className="lg:grid lg:grid-cols-5 lg:gap-x-8">
-            <MobileFilters sizes={sizes} colors={colors} />
+            <MobileFilters filters={filters} />
             <div className="hidden lg:block">
-              <Filter valueKey={"sizeId"} name="Sizes" data={sizes} />
-              <Filter valueKey={"colorId"} name="Colors" data={colors} />
+              {filters.map((filter) => (
+                <Filter
+                  valueKey={filter.id}
+                  name={filter.name}
+                  data={filter.filterItems}
+                />
+              ))}
             </div>
             <div className="mt-6 lg:col-span-4 lg:mt-0">
               {products.length === 0 && <NoResults />}
