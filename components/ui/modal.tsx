@@ -33,7 +33,7 @@ const Modal = ({
                   "w-full max-w-3xl overflow-hidden rounded-md text-left align-middle"
                 }
               >
-                <div className="relative flex items-center w-full bg-white overflow-hidden px-4 pt-14 pb-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8 ">
+                <div className="relative flex items-center w-full bg-background overflow-hidden px-4 pt-14 pb-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8 ">
                   <div className="absolute right-4 top-4">
                     <IconButton icon={<X size={15} />} onClick={onClose} />
                   </div>

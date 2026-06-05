@@ -1,83 +1,83 @@
 "use client";
-import React from "react";
-import { ArrowRightFromLine, Menu, Settings, ShoppingCart } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { useUser } from "@clerk/nextjs";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "./ui/navigation-menu1";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useSession } from "@/hooks/useSession";
+import { User, Package, LogOut, ChevronDown } from "lucide-react";
 
 const UserProfileButton = () => {
-  const { user } = useUser();
+  const { session, loading } = useSession();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const logout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    setOpen(false);
+    router.push("/");
+    router.refresh();
+  };
+
+  if (loading) return null;
+  if (!session.isLoggedIn) {
+    return (
+      <Link href="/sign-in" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+        Sign In
+      </Link>
+    );
+  }
+
+  const initials = `${session.firstName?.[0] ?? ""}${session.lastName?.[0] ?? ""}`.toUpperCase();
+
   return (
-    <div>
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem slot="right">
-            <NavigationMenuTrigger>
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={user?.imageUrl} />
-                <AvatarFallback>
-                  {user?.firstName?.charAt(0)}
-                  {user?.lastName?.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-            </NavigationMenuTrigger>
-            <NavigationMenuContent role="menuitem">
-              <div className="w-96 max-w-[calc(100vw-2rem)] items-stretch flex flex-col py-6">
-                <div className="flex gap-4 items-center justify-start w-full px-6 mb-2 ">
-                  <Avatar className="h-11 w-11">
-                    <AvatarImage src={user?.imageUrl} />
-                    <AvatarFallback>
-                      {user?.firstName?.charAt(0)}
-                      {user?.lastName?.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col items-stretch justify-center text-center">
-                    <div className="font-medium text-sm text-ellipsis whitespace-nowrap flex">
-                      {user?.fullName}
-                    </div>
-                    <div className="font-normal text-sm text-ellipsis whitespace-nowrap text-black/60">
-                      {user?.primaryEmailAddress?.emailAddress}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col items-stretch justify-center font-normal text-sm">
-                  <Link
-                    href={"/profile"}
-                    className="flex items-center gap-4 justify-start py-[0.875rem] pl-8  px-6  hover:bg-black/[0.04] transition-colors duration-100"
-                  >
-                    <div className="flex items-stretch justify-center">
-                      <Settings className="h-4 w-4 text-black/50" />
-                    </div>
-                    <div className="text-black/60 font-medium">
-                      Manage Account
-                    </div>
-                  </Link>
-                  <Link
-                    href={"/orders"}
-                    className="flex items-center gap-4 justify-start py-[0.875rem] pl-8  px-6  hover:bg-black/[0.04] transition-colors duration-100"
-                  >
-                    <div className="flex items-stretch justify-center">
-                      <ShoppingCart className="h-4 w-4 text-black/50" />
-                    </div>
-                    <div className="text-black/60 font-medium">Your Orders</div>
-                  </Link>
-                  <button className="flex items-center gap-4 justify-start py-[0.875rem] pl-8  px-6  hover:bg-black/[0.04] transition-colors duration-100">
-                    <ArrowRightFromLine className="h-4 w-4 text-black/50" />
-                    <div className="text-black/60 font-medium">Sign Out</div>
-                  </button>
-                </div>
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-muted transition-colors border border-border"
+      >
+        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
+          {initials || <User className="w-4 h-4" />}
+        </div>
+        <span className="text-sm font-medium text-foreground hidden sm:block">{session.firstName}</span>
+        <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 top-full mt-2 w-52 bg-popover border border-border rounded-2xl shadow-xl z-50 overflow-hidden">
+            <div className="px-4 py-3 border-b border-border bg-muted/50">
+              <p className="text-xs text-muted-foreground">Signed in as</p>
+              <p className="text-sm font-semibold text-foreground">{session.firstName} {session.lastName}</p>
+              <p className="text-xs text-muted-foreground truncate">{session.email}</p>
+            </div>
+            <div className="py-1">
+              <Link href="/orders" onClick={() => setOpen(false)}
+                className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-muted transition-colors">
+                <Package className="w-4 h-4 text-muted-foreground" /> My Orders
+              </Link>
+              <Link href="/profile" onClick={() => setOpen(false)}
+                className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-muted transition-colors">
+                <User className="w-4 h-4 text-muted-foreground" /> My Profile
+              </Link>
+              <div className="border-t border-border mt-1 pt-1">
+                <button onClick={logout}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-destructive hover:bg-destructive/10 transition-colors">
+                  <LogOut className="w-4 h-4" /> Sign Out
+                </button>
               </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

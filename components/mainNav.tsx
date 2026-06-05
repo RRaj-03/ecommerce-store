@@ -44,8 +44,10 @@ const MainNav = ({ data }: { data: Category[] }) => {
                           key={component.href}
                           href={component.href}
                           className={cn(
-                            "text-sm font-medium transition-colors hover:text-black",
-                            component.active ? "text-black" : "text-neutral-500"
+                            "text-sm font-medium transition-colors hover:text-primary",
+                            component.active
+                              ? "text-primary font-bold"
+                              : "text-muted-foreground"
                           )}
                         >
                           {component.label}
@@ -57,13 +59,14 @@ const MainNav = ({ data }: { data: Category[] }) => {
               );
             }
             return (
-              <NavigationMenuItem className="w-full">
+              <NavigationMenuItem key={route.href} className="w-full">
                 <Link
-                  key={route.href}
                   href={route.href}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-black",
-                    route.active ? "text-black" : "text-neutral-500"
+                    "text-sm font-medium transition-colors hover:text-primary",
+                    route.active
+                      ? "text-primary font-bold"
+                      : "text-muted-foreground"
                   )}
                 >
                   {route.label}

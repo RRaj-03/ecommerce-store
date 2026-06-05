@@ -7,7 +7,7 @@ const GalleryTab = ({ image }: { image: ImageType }) => {
   return (
     <Tab
       className={
-        "relative flex aspect-square cursor-pointer rounded-md bg-white items-center justify-center"
+        "relative flex aspect-square cursor-pointer rounded-md bg-white items-center justify-center dark:bg-slate-900"
       }
     >
       {({ selected }) => (
@@ -23,7 +23,7 @@ const GalleryTab = ({ image }: { image: ImageType }) => {
           <span
             className={cn(
               "absolute inset-0 rounded-md ring-2 ring-offset-2",
-              selected ? "ring-black" : "ring-transparent "
+              selected ? "ring-black dark:ring-white" : "ring-transparent "
             )}
           ></span>
         </div>

@@ -28,7 +28,7 @@ const Sidebar = ({ name }: { name: string }) => {
   const pathname = usePathname();
   const router = useRouter();
   return (
-    <div className="space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white">
+    <div className="space-y-4 py-4 flex flex-col h-full bg-slate-900 text-white dark:bg-card dark:text-foreground border-r border-border">
       <div className="px-3 py-2 flex-1 ">
         <div
           className="mb-6 cursor-pointer p-1"
@@ -36,13 +36,18 @@ const Sidebar = ({ name }: { name: string }) => {
             router.push("/");
           }}
         >
-          <ArrowLeftIcon />
+          <ArrowLeftIcon className="text-white dark:text-foreground" />
         </div>
         <Link href={"/dashboard"} className="flex items-center pl-3 mb-14">
           <div className="relative w-10 h-10 mr-4">
             <Image fill alt="Logo" src={"/logo.png"} />
           </div>
-          <h1 className={cn("text-2xl font-bold", montserrat.className)}>
+          <h1
+            className={cn(
+              "text-2xl font-bold text-white dark:text-foreground",
+              montserrat.className
+            )}
+          >
             {name}
           </h1>
         </Link>
@@ -53,10 +58,10 @@ const Sidebar = ({ name }: { name: string }) => {
                 href={ele.href}
                 key={ele.href}
                 className={cn(
-                  "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition",
+                  "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:bg-white/10 dark:hover:bg-muted rounded-lg transition",
                   pathname.startsWith(ele.href)
-                    ? "text-white bg-white/10"
-                    : "text-zinc-400"
+                    ? "text-white bg-white/10 dark:bg-muted dark:text-foreground"
+                    : "text-zinc-400 dark:text-muted-foreground"
                 )}
               >
                 <div className=" flex items-center flex-1">

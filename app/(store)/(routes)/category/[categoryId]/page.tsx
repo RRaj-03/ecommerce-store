@@ -25,7 +25,7 @@ const CategoryPage = async ({
   const filters = await getFilters();
   const category = await getCategory(params.categoryId);
   return (
-    <div className="bg-white ">
+    <div className="bg-background ">
       <Contanier>
         <Billboard data={category.billboard} />
         <div className="px-4 sm:px-6 lg:px-8 pb-24">

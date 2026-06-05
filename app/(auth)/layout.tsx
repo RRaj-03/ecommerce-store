@@ -1,9 +1,27 @@
+import getStores from "@/actions/getStore";
+import getTheme from "@/actions/getTheme";
+import { ThemeInjector } from "@/components/theme-injector";
 import React from "react";
 
-const AuthLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="h-full flex items-center justify-center ">{children}</div>
-  );
-};
+export default async function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const store = await getStores();
+  const theme = await getTheme();
 
-export default AuthLayout;
+  return (
+    <>
+      <ThemeInjector theme={theme} />
+      {/* Pass store data via a hidden div so client pages can read store name/logo from DOM */}
+      <div
+        id="store-meta"
+        data-name={store?.name ?? ""}
+        data-logo={store?.images?.[0]?.url ?? ""}
+        className="hidden"
+      />
+      {children}
+    </>
+  );
+}

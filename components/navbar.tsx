@@ -9,7 +9,7 @@ export const revalidate = 0;
 const Navbar = async () => {
   const categories = await getCategories();
   return (
-    <div className="border-b">
+    <div className="border-b bg-background">
       <Contanier>
         <div className="px-4 relative sm:px-6 lg:px-8 flex items-center h-16">
           <Link href={"/"} className="ml-4 lg:ml-0 flex gap-x-2">

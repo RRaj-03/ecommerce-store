@@ -25,7 +25,7 @@ const MobileFilters = ({ filters }: { filters: FilterType[] }) => {
         <div className="fixed inset-0 z-40 flex ">
           <Dialog.Panel
             className={
-              "relative ml-auto h-full w-full max-w-xs flex-col flex overflow-y-auto bg-white py-4 pb-6 shadow-xl"
+              "relative ml-auto h-full w-full max-w-xs flex-col flex overflow-y-auto bg-white py-4 pb-6 shadow-xl dark:bg-slate-900"
             }
           >
             <div className="flex items-center justify-end px-4 ">

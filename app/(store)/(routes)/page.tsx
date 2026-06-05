@@ -7,7 +7,7 @@ import ProductList from "@/components/productList";
 import Stats from "@/components/stats";
 import Testinomials from "@/components/testinomials";
 import Contanier from "@/components/ui/contanier";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import React from "react";
 export const revalidate = 0;

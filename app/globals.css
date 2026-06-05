@@ -79,4 +79,45 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+
+  .dark .cl-card {
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    border: 1px solid hsl(var(--border));
+  }
+  .dark .cl-headerTitle,
+  .dark .cl-headerSubtitle,
+  .dark .cl-profileSectionTitleText,
+  .dark .cl-userPreviewMainIdentifier,
+  .dark .cl-userPreviewSecondaryIdentifier,
+  .dark .cl-accordionTriggerButton {
+    color: hsl(var(--foreground));
+  }
+  .dark .cl-menuButton,
+  .dark .cl-navbarButton {
+    color: hsl(var(--muted-foreground));
+  }
+  .dark .cl-menuButton.cl-active,
+  .dark .cl-navbarButton.cl-active {
+    color: hsl(var(--primary));
+    background-color: hsl(var(--muted));
+  }
+  .dark .cl-scrollBox {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+  .dark .cl-footerActionText {
+    color: hsl(var(--muted-foreground));
+  }
+  .dark .cl-footerActionLink {
+    color: hsl(var(--primary));
+  }
+  .dark .cl-formFieldLabel {
+    color: hsl(var(--foreground));
+  }
+  .dark .cl-formFieldInput {
+    background-color: hsl(var(--input));
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--border));
+  }
 }
