@@ -6,6 +6,7 @@ import ProductList from "@/components/productList";
 import ProductInfoTabs from "@/components/product-info-tabs";
 import Contanier from "@/components/ui/contanier";
 import React from "react";
+import { redirect } from "next/navigation";
 
 const ProductPage = async ({
   params,
@@ -15,6 +16,9 @@ const ProductPage = async ({
   };
 }) => {
   const product = await getProduct(params.productId);
+  if (!product) {
+    redirect("/");
+  }
   const suggestedProducts = await getProducts({
     categoryId: product?.category?.id,
   });

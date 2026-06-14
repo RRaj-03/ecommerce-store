@@ -3,7 +3,7 @@ import { StoreTheme } from "@/actions/getTheme";
 const GOOGLE_FONTS_BASE = "https://fonts.googleapis.com/css2?display=swap";
 
 function buildFontUrl(fonts: string[]): string {
-  const unique = [...new Set(fonts)].filter(Boolean);
+  const unique = Array.from(new Set(fonts)).filter(Boolean);
   const params = unique
     .map((f) => `family=${f.replace(/\s+/g, "+")}:wght@300;400;500;600;700`)
     .join("&");
